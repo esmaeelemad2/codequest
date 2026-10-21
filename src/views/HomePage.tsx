@@ -8,7 +8,8 @@ import {
   Code2, 
   ArrowRight, 
   Sparkles,
-  BarChart2
+  BarChart2,
+  ShieldCheck
 } from 'lucide-react';
 import { Quiz, ProgrammingLanguage } from '../types/quiz';
 import { LANGUAGES } from '../data/languages';
@@ -315,6 +316,40 @@ export const HomePage: React.FC<HomePageProps> = ({
               onStartQuiz={onStartQuiz}
             />
           ))}
+        </div>
+      </section>
+
+      {/* Cybersecurity Feature Spotlight */}
+      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="relative overflow-hidden rounded-3xl border border-brand-200/90 bg-gradient-to-r from-navy-900 via-slate-900 to-indigo-950 p-8 sm:p-12 text-white shadow-xl">
+          <div className="absolute right-0 top-0 h-full w-1/3 bg-radial from-brand-500/20 to-transparent pointer-events-none" />
+          
+          <div className="relative z-10 max-w-2xl space-y-4">
+            <div className="inline-flex items-center gap-2 rounded-full bg-brand-500/20 border border-brand-400/30 px-3.5 py-1 text-xs font-semibold text-brand-300">
+              <ShieldCheck className="h-4 w-4 text-brand-400" />
+              <span>NEW: OWASP Top 10 Aligned</span>
+            </div>
+            
+            <h2 className="text-3xl font-extrabold tracking-tight sm:text-4xl text-white">
+              Master Secure Coding & Vulnerability Defense
+            </h2>
+            
+            <p className="text-sm sm:text-base text-slate-300 leading-relaxed">
+              Learn to spot SQL Injection, Cross-Site Scripting (XSS), Broken Access Control, and more before attackers do. Test your defensive programming knowledge with interactive challenges.
+            </p>
+            
+            <div className="pt-2 flex flex-wrap items-center gap-4">
+              <button
+                type="button"
+                onClick={() => onNavigate('cybersecurity')}
+                className="flex items-center gap-2 rounded-xl bg-brand-600 px-5 py-3 text-sm font-semibold text-white shadow-md hover:bg-brand-500 transition-all active:scale-[0.98]"
+              >
+                <ShieldCheck className="h-4 w-4" />
+                <span>Explore Secure Coding Challenges</span>
+                <ArrowRight className="h-4 w-4" />
+              </button>
+            </div>
+          </div>
         </div>
       </section>
 

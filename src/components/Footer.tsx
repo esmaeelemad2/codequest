@@ -73,6 +73,15 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onOpenModal }) => {
               <li>
                 <button
                   type="button"
+                  onClick={() => onNavigate('cybersecurity')}
+                  className="hover:text-brand-600 transition-colors"
+                >
+                  Secure Coding Challenges
+                </button>
+              </li>
+              <li>
+                <button
+                  type="button"
                   onClick={() => onNavigate('progress')}
                   className="hover:text-brand-600 transition-colors"
                 >

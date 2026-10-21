@@ -9,7 +9,8 @@ import {
   Play, 
   Home, 
   PlusCircle, 
-  Terminal 
+  Terminal,
+  ShieldCheck 
 } from 'lucide-react';
 
 interface NavbarProps {
@@ -29,6 +30,7 @@ export const Navbar: React.FC<NavbarProps> = ({
     { id: 'home', label: 'Home', icon: Home },
     { id: 'explore', label: 'Explore Quizzes', icon: Compass },
     { id: 'languages', label: 'Languages', icon: Layers },
+    { id: 'cybersecurity', label: 'Cybersecurity', icon: ShieldCheck },
     { id: 'progress', label: 'My Progress', icon: BarChart3 },
     { 
       id: 'bookmarks', 
