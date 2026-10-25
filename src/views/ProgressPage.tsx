@@ -12,8 +12,7 @@ import {
   Sparkles,
   Compass,
   CheckCircle2,
-  TrendingUp,
-  ShieldCheck
+  TrendingUp
 } from 'lucide-react';
 import { Quiz, QuizAttempt, ProgrammingLanguage } from '../types/quiz';
 import { calculateStats, clearAllProgress } from '../services/storage';
@@ -26,7 +25,6 @@ interface ProgressPageProps {
   onRefreshData: () => void;
   onStartQuiz: (quizId: string) => void;
   onNavigateToExplore: () => void;
-  onNavigateToCybersecurity?: () => void;
 }
 
 export const ProgressPage: React.FC<ProgressPageProps> = ({
@@ -35,7 +33,6 @@ export const ProgressPage: React.FC<ProgressPageProps> = ({
   onRefreshData,
   onStartQuiz,
   onNavigateToExplore,
-  onNavigateToCybersecurity,
 }) => {
   const [showClearModal, setShowClearModal] = useState(false);
   const stats = calculateStats(quizzes);
@@ -418,34 +415,6 @@ export const ProgressPage: React.FC<ProgressPageProps> = ({
               </table>
             </div>
           </div>
-        </div>
-      )}
-
-      {/* Cybersecurity Learning Track Callout */}
-      {onNavigateToCybersecurity && (
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 rounded-3xl border border-brand-200 bg-gradient-to-r from-brand-50/80 via-white to-purple-50/60 p-6 shadow-xs">
-          <div className="flex items-center gap-4">
-            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-brand-600 text-white shadow-sm">
-              <ShieldCheck className="h-6 w-6" />
-            </div>
-            <div>
-              <h3 className="text-base font-bold text-navy-900">
-                Secure Coding & Vulnerability Challenges
-              </h3>
-              <p className="text-xs text-slate-600 mt-0.5">
-                Ready to level up your defensive engineering skills? Practice spotting real-world flaws and mitigating OWASP Top 10 vulnerabilities.
-              </p>
-            </div>
-          </div>
-
-          <button
-            type="button"
-            onClick={onNavigateToCybersecurity}
-            className="inline-flex shrink-0 items-center gap-2 rounded-xl bg-brand-600 px-4 py-2.5 text-xs font-semibold text-white shadow-xs hover:bg-brand-700 transition-colors"
-          >
-            <span>View Security Challenges</span>
-            <ArrowRight className="h-4 w-4" />
-          </button>
         </div>
       )}
 

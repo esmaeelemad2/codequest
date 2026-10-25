@@ -10,7 +10,6 @@ import { QuizResultPage } from './views/QuizResultPage';
 import { ProgressPage } from './views/ProgressPage';
 import { BookmarksPage } from './views/BookmarksPage';
 import { CreatorPage } from './views/CreatorPage';
-import { CybersecurityPage } from './views/CybersecurityPage';
 import { 
   getAllQuizzes, 
   getBookmarks, 
@@ -149,12 +148,6 @@ export const App: React.FC = () => {
           />
         )}
 
-        {currentTab === 'cybersecurity' && (
-          <CybersecurityPage
-            onNavigateHome={() => handleNavigate('home')}
-          />
-        )}
-
         {currentTab === 'progress' && (
           <ProgressPage
             quizzes={allQuizzes}
@@ -162,7 +155,6 @@ export const App: React.FC = () => {
             onRefreshData={reloadData}
             onStartQuiz={handleStartQuiz}
             onNavigateToExplore={() => handleNavigate('explore')}
-            onNavigateToCybersecurity={() => handleNavigate('cybersecurity')}
           />
         )}
 
