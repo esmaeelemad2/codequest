@@ -236,9 +236,9 @@ export const AiTutorPage: React.FC<AiTutorPageProps> = ({ initialMessage, onNavi
             <div className="mt-3 rounded-xl border border-amber-200 bg-white p-4 text-xs font-mono text-slate-700 space-y-1">
               <p className="font-sans font-semibold text-slate-900 mb-2">Administrator Setup Instructions:</p>
               <p>1. SSH into the server: <span className="text-brand-600">/home/codeskill/api-config.php</span></p>
-              <p>2. Set <span className="text-brand-600">$AI_API_KEY</span> to your Groq API key (gsk_...)</p>
+              <p>2. Set <span className="text-brand-600">$AI_API_KEY</span> to your primary provider key</p>
               <p>3. Set <span className="text-brand-600">$AI_MODEL</span> (default: openai/gpt-oss-20b)</p>
-              <p>4. Optionally set <span className="text-brand-600">$AI_FALLBACK_API_KEY</span> for OpenRouter (sk-or-...)</p>
+              <p>4. Optionally configure fallback provider keys</p>
               <p>5. Save the file — no server restart needed</p>
             </div>
           </div>
