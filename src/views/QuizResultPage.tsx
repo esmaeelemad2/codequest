@@ -11,7 +11,8 @@ import {
   Sparkles, 
   BookOpen, 
   Check, 
-  X
+  X,
+  BrainCircuit
 } from 'lucide-react';
 import { Quiz, QuizAttempt } from '../types/quiz';
 import { CodeBlock } from '../components/CodeBlock';
@@ -23,6 +24,7 @@ interface QuizResultPageProps {
   onRetakeQuiz: () => void;
   onExploreMore: () => void;
   onGoHome: () => void;
+  onOpenAiTutor?: (initialMessage: string) => void;
 }
 
 export const QuizResultPage: React.FC<QuizResultPageProps> = ({
@@ -31,6 +33,7 @@ export const QuizResultPage: React.FC<QuizResultPageProps> = ({
   onRetakeQuiz,
   onExploreMore,
   onGoHome,
+  onOpenAiTutor,
 }) => {
   const reviewRef = useRef<HTMLDivElement>(null);
 
@@ -398,6 +401,34 @@ export const QuizResultPage: React.FC<QuizResultPageProps> = ({
                       </div>
                     )}
                   </div>
+                  {/* Explain with AI Tutor Action */}
+                  {onOpenAiTutor && (
+                    <div className="pt-1">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const userChoiceText = userChoiceIdx !== null && userChoiceIdx !== undefined
+                            ? q.options[userChoiceIdx]
+                            : 'Unanswered';
+                          const prompt = `I am practicing ${quiz.language.toUpperCase()} on CodeQuest and reviewing this question:\n\n` +
+                            `Question: "${q.text}"\n\n` +
+                            (q.codeSnippet ? `Code snippet:\n\`\`\`${q.codeLanguage || quiz.language}\n${q.codeSnippet}\n\`\`\`\n\n` : '') +
+                            `Options:\n${q.options.map((opt, i) => `${String.fromCharCode(65 + i)}) ${opt}`).join('\n')}\n\n` +
+                            `My choice: ${userChoiceText}\n` +
+                            `Correct answer: ${String.fromCharCode(65 + q.correctIndex)}) ${q.options[q.correctIndex]}\n\n` +
+                            `Explanation: "${q.explanation}"\n\n` +
+                            (isCorrect
+                              ? `Can you explain the underlying concept in more depth and give me another small example?`
+                              : `Can you explain why my choice was wrong, break down why the correct answer is right, and provide a progressive learning tip?`);
+                          onOpenAiTutor(prompt);
+                        }}
+                        className="inline-flex items-center gap-2 rounded-xl border border-brand-200 bg-brand-50 px-3.5 py-2 text-xs font-semibold text-brand-700 hover:bg-brand-100 hover:border-brand-300 transition-colors shadow-2xs"
+                      >
+                        <BrainCircuit className="h-4 w-4 text-brand-600" />
+                        <span>Explain with AI Tutor</span>
+                      </button>
+                    </div>
+                  )}
                 </div>
               </div>
             );

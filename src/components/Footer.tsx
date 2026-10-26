@@ -73,6 +73,15 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onOpenModal }) => {
               <li>
                 <button
                   type="button"
+                  onClick={() => onNavigate('ai-tutor')}
+                  className="hover:text-brand-600 transition-colors"
+                >
+                  AI Tutor
+                </button>
+              </li>
+              <li>
+                <button
+                  type="button"
                   onClick={() => onNavigate('progress')}
                   className="hover:text-brand-600 transition-colors"
                 >

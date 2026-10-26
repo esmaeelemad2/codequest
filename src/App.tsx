@@ -10,6 +10,7 @@ import { QuizResultPage } from './views/QuizResultPage';
 import { ProgressPage } from './views/ProgressPage';
 import { BookmarksPage } from './views/BookmarksPage';
 import { CreatorPage } from './views/CreatorPage';
+import { AiTutorPage } from './views/AiTutorPage';
 import { 
   getAllQuizzes, 
   getBookmarks, 
@@ -28,6 +29,9 @@ export const App: React.FC = () => {
   // Active playing quiz and attempt
   const [activeQuizId, setActiveQuizId] = useState<string | null>(null);
   const [activeAttempt, setActiveAttempt] = useState<QuizAttempt | null>(null);
+
+  // AI Tutor initial prefilled message (e.g. from quiz result review)
+  const [aiTutorInitialMessage, setAiTutorInitialMessage] = useState<string | undefined>(undefined);
 
   // Filter passed when navigating from other views (e.g. from Languages page)
   const [languageFilter, setLanguageFilter] = useState<string>('all');
@@ -66,7 +70,16 @@ export const App: React.FC = () => {
     }
     setActiveQuizId(null);
     setActiveAttempt(null);
+    if (tab !== 'ai-tutor') {
+      setAiTutorInitialMessage(undefined);
+    }
     setCurrentTab(tab);
+  };
+
+  // Open AI Tutor with optional initial context prompt
+  const handleOpenAiTutor = (initialMessage?: string) => {
+    setAiTutorInitialMessage(initialMessage);
+    handleNavigate('ai-tutor');
   };
 
   // Start a Quiz
@@ -148,6 +161,14 @@ export const App: React.FC = () => {
           />
         )}
 
+        {currentTab === 'ai-tutor' && (
+          <AiTutorPage
+            key={aiTutorInitialMessage}
+            initialMessage={aiTutorInitialMessage}
+            onNavigate={handleNavigate}
+          />
+        )}
+
         {currentTab === 'progress' && (
           <ProgressPage
             quizzes={allQuizzes}
@@ -191,6 +212,7 @@ export const App: React.FC = () => {
             onRetakeQuiz={handleRetakeQuiz}
             onExploreMore={() => handleNavigate('explore')}
             onGoHome={() => handleNavigate('home')}
+            onOpenAiTutor={handleOpenAiTutor}
           />
         )}
       </main>
