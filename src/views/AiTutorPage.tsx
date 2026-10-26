@@ -237,7 +237,7 @@ export const AiTutorPage: React.FC<AiTutorPageProps> = ({ initialMessage, onNavi
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-600 text-white">
               <BrainCircuit className="h-4 w-4" />
             </div>
-            <span className="text-sm font-semibold text-slate-900">CodeQuest AI Tutor</span>
+            <span className="text-sm font-semibold text-slate-900">CodeSkill AI Tutor</span>
             <span className="hidden sm:inline rounded-full bg-emerald-100 px-2 py-0.5 text-[10px] font-bold text-emerald-700">
               ONLINE
             </span>

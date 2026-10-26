@@ -25,7 +25,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onOpenModal }) => {
                 <Terminal className="h-5 w-5" />
               </div>
               <span className="text-xl font-extrabold text-navy-900">
-                Code<span className="text-brand-600">Quest</span>
+                Code<span className="text-brand-600">Skill</span>
               </span>
             </div>
             <p className="mt-3 text-xs text-slate-500 leading-relaxed">
@@ -134,7 +134,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onOpenModal }) => {
                   onClick={() => onOpenModal('about')}
                   className="hover:text-brand-600 transition-colors"
                 >
-                  About CodeQuest
+                  About CodeSkill
                 </button>
               </li>
               <li>
@@ -170,7 +170,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onOpenModal }) => {
 
         {/* Bottom bar */}
         <div className="mt-10 border-t border-slate-100 pt-6 flex flex-col items-center justify-between gap-4 text-xs text-slate-500 sm:flex-row">
-          <p>© {new Date().getFullYear()} CodeQuest. All rights reserved. English edition.</p>
+          <p>© {new Date().getFullYear()} CodeSkill. All rights reserved. English edition.</p>
           <p className="flex items-center gap-1.5">
             <span className="inline-block h-2 w-2 rounded-full bg-emerald-500"></span>
             <span>All systems operational • Pure client-side privacy</span>

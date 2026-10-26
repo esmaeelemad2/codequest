@@ -1,32 +1,31 @@
-# React + TypeScript + Vite
+# CodeSkill — Test Your Skills. Master Your Code.
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+CodeSkill is an interactive, developer-focused programming quiz platform designed to help developers, students, and engineers master code comprehension, identify knowledge gaps, and practice real-world programming concepts.
 
-Currently, two official plugins are available:
+## 🚀 Key Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- **Multi-Language Support**: Interactive quizzes across Python, JavaScript, Java, C++, C#, SQL, and HTML & CSS.
+- **Realistic Code Tracing**: Practice reading real code snippets, scope behaviors, execution order, and tricky edge cases.
+- **AI Programming Tutor**: Real-time AI programming assistant powered by Google Gemini (`gemini-3.5-flash`), featuring guided hints, line-by-line code breakdowns, and deep concept explanations.
+- **Performance Analytics**: Instant scoring, streak tracking, accuracy breakdowns by category and difficulty, and detailed answer reviews.
+- **Interactive Quiz Authoring**: Custom quiz creator with schema validation and JSON export/import.
+- **Client-Side Privacy**: Bookmarks, progress, and custom quizzes stored locally on your device without invasive trackers.
 
-## React Compiler
+## 🛠 Tech Stack
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **Frontend**: React 19, TypeScript, Vite, Tailwind CSS, Lucide Icons, PrismJS
+- **Backend / AI Proxy**: Secure PHP endpoint interfacing with Google Gemini API (`gemini-3.5-flash`)
+- **Web Server**: Nginx with TLS via Let's Encrypt, CloudPanel on Ubuntu VPS
 
-## Expanding the Oxlint configuration
+## 💻 Local Development
 
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
+```bash
+# Install dependencies
+npm install
 
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+# Start Vite dev server
+npm run dev
+
+# Typecheck and build for production
+npm run build
 ```
-
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.

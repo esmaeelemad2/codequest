@@ -194,7 +194,7 @@ export const CreatorPage: React.FC<CreatorPageProps> = ({
     const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(customQuizzes, null, 2));
     const downloadAnchor = document.createElement('a');
     downloadAnchor.setAttribute('href', dataStr);
-    downloadAnchor.setAttribute('download', 'codequest_custom_quizzes.json');
+    downloadAnchor.setAttribute('download', 'codeskill_custom_quizzes.json');
     document.body.appendChild(downloadAnchor);
     downloadAnchor.click();
     downloadAnchor.remove();
@@ -213,7 +213,7 @@ export const CreatorPage: React.FC<CreatorPageProps> = ({
             Quiz Creator & Manager
           </h1>
           <p className="mt-1 text-sm text-slate-600 max-w-2xl leading-relaxed">
-            Create custom coding quizzes, add authentic code snippets, configure question types, and immediately test them in CodeQuest.
+            Create custom coding quizzes, add authentic code snippets, configure question types, and immediately test them in CodeSkill.
           </p>
         </div>
 
@@ -236,7 +236,7 @@ export const CreatorPage: React.FC<CreatorPageProps> = ({
           <span>Client-Side Authoring Environment</span>
         </div>
         <p className="leading-relaxed">
-          CodeQuest does not use mock logins or insecure hardcoded administrative keys. All custom quizzes you author are validated in-browser and stored securely in your local environment. They automatically appear alongside built-in quizzes and can be exported as JSON anytime.
+          CodeSkill does not use mock logins or insecure hardcoded administrative keys. All custom quizzes you author are validated in-browser and stored securely in your local environment. They automatically appear alongside built-in quizzes and can be exported as JSON anytime.
         </p>
       </div>
 

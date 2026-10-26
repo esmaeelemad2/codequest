@@ -68,14 +68,14 @@ export const InfoModals: React.FC<InfoModalProps> = ({ isOpen, type, onClose }) 
               <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-50 text-brand-600">
                 <Info className="h-5 w-5" />
               </div>
-              <h2 className="text-xl font-bold text-navy-900">About CodeQuest</h2>
+              <h2 className="text-xl font-bold text-navy-900">About CodeSkill</h2>
             </div>
             <div className="mt-4 space-y-3 text-sm text-slate-600 leading-relaxed">
               <p>
-                <strong>CodeQuest</strong> is an interactive programming quiz platform built for developers, students, and interview candidates who want to master real-world code comprehension.
+                <strong>CodeSkill</strong> is an interactive programming quiz platform built for developers, students, and interview candidates who want to master real-world code comprehension.
               </p>
               <p>
-                Traditional flashcards test trivia, but writing software requires reading code, predicting execution output, tracing scope boundaries, and catching bugs. CodeQuest presents realistic code snippets across popular languages — <strong>Python, JavaScript, Java, C++, C#, SQL, and HTML & CSS</strong> — with deep pedagogical explanations for every question.
+                Traditional flashcards test trivia, but writing software requires reading code, predicting execution output, tracing scope boundaries, and catching bugs. CodeSkill presents realistic code snippets across popular languages — <strong>Python, JavaScript, Java, C++, C#, SQL, and HTML & CSS</strong> — with deep pedagogical explanations for every question.
               </p>
               <div className="rounded-xl bg-slate-50 p-4 border border-slate-200">
                 <h4 className="font-semibold text-slate-900">Our Core Principles:</h4>
@@ -96,7 +96,7 @@ export const InfoModals: React.FC<InfoModalProps> = ({ isOpen, type, onClose }) 
               <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
                 <Mail className="h-5 w-5" />
               </div>
-              <h2 className="text-xl font-bold text-navy-900">Contact CodeQuest Team</h2>
+              <h2 className="text-xl font-bold text-navy-900">Contact CodeSkill Team</h2>
             </div>
             {contactSubmitted ? (
               <div className="mt-6 rounded-2xl bg-emerald-50 border border-emerald-200 p-6 text-center">
@@ -186,7 +186,7 @@ export const InfoModals: React.FC<InfoModalProps> = ({ isOpen, type, onClose }) 
                 <strong>Last Updated: February 2026</strong>
               </p>
               <p>
-                At CodeQuest, we prioritize developer privacy. We believe that practicing code and testing your knowledge should not come at the expense of your personal data.
+                At CodeSkill, we prioritize developer privacy. We believe that practicing code and testing your knowledge should not come at the expense of your personal data.
               </p>
               <h4 className="font-semibold text-slate-900">1. Client-Side Data Storage</h4>
               <p>
@@ -194,7 +194,7 @@ export const InfoModals: React.FC<InfoModalProps> = ({ isOpen, type, onClose }) 
               </p>
               <h4 className="font-semibold text-slate-900">2. Cookies & Telemetry</h4>
               <p>
-                CodeQuest does not use invasive third-party tracking cookies or advertising pixels. Your practice history remains private on your personal device.
+                CodeSkill does not use invasive third-party tracking cookies or advertising pixels. Your practice history remains private on your personal device.
               </p>
               <h4 className="font-semibold text-slate-900">3. Data Control</h4>
               <p>
@@ -218,19 +218,19 @@ export const InfoModals: React.FC<InfoModalProps> = ({ isOpen, type, onClose }) 
                 <strong>Last Updated: February 2026</strong>
               </p>
               <p>
-                By accessing and using CodeQuest, you agree to comply with and be bound by the following terms and conditions:
+                By accessing and using CodeSkill, you agree to comply with and be bound by the following terms and conditions:
               </p>
               <h4 className="font-semibold text-slate-900">1. Educational Purpose</h4>
               <p>
-                CodeQuest quizzes and materials are provided solely for educational, practice, and skill evaluation purposes. Snippets represent standard language specifications and common industry runtime environments.
+                CodeSkill quizzes and materials are provided solely for educational, practice, and skill evaluation purposes. Snippets represent standard language specifications and common industry runtime environments.
               </p>
               <h4 className="font-semibold text-slate-900">2. Content & Fair Use</h4>
               <p>
-                All code questions, explanations, and visual designs are provided for personal learning. You may use CodeQuest to prepare for technical interviews, university courses, and independent study.
+                All code questions, explanations, and visual designs are provided for personal learning. You may use CodeSkill to prepare for technical interviews, university courses, and independent study.
               </p>
               <h4 className="font-semibold text-slate-900">3. Disclaimer</h4>
               <p>
-                While we strive for accuracy across language specifications, software platforms evolve continuously. CodeQuest is provided "as is" without warranty of any kind.
+                While we strive for accuracy across language specifications, software platforms evolve continuously. CodeSkill is provided "as is" without warranty of any kind.
               </p>
             </div>
           </div>

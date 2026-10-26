@@ -410,7 +410,7 @@ export const QuizResultPage: React.FC<QuizResultPageProps> = ({
                           const userChoiceText = userChoiceIdx !== null && userChoiceIdx !== undefined
                             ? q.options[userChoiceIdx]
                             : 'Unanswered';
-                          const prompt = `I am practicing ${quiz.language.toUpperCase()} on CodeQuest and reviewing this question:\n\n` +
+                          const prompt = `I am practicing ${quiz.language.toUpperCase()} on CodeSkill and reviewing this question:\n\n` +
                             `Question: "${q.text}"\n\n` +
                             (q.codeSnippet ? `Code snippet:\n\`\`\`${q.codeLanguage || quiz.language}\n${q.codeSnippet}\n\`\`\`\n\n` : '') +
                             `Options:\n${q.options.map((opt, i) => `${String.fromCharCode(65 + i)}) ${opt}`).join('\n')}\n\n` +

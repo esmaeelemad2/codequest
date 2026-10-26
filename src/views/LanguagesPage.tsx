@@ -30,7 +30,7 @@ export const LanguagesPage: React.FC<LanguagesPageProps> = ({
           Programming Languages
         </h1>
         <p className="mt-1.5 text-sm text-slate-600 max-w-2xl leading-relaxed">
-          CodeQuest covers a focused set of high-impact programming languages. Choose your track below to inspect quiz collections, syllabus topics, and practice questions.
+          CodeSkill covers a focused set of high-impact programming languages. Choose your track below to inspect quiz collections, syllabus topics, and practice questions.
         </p>
       </div>
 

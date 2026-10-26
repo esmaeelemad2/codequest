@@ -105,7 +105,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                       <span className="h-3 w-3 rounded-full bg-amber-500/90" />
                       <span className="h-3 w-3 rounded-full bg-emerald-500/90" />
                     </div>
-                    <span className="font-mono text-slate-400 ml-2">codequest_challenge.py</span>
+                    <span className="font-mono text-slate-400 ml-2">codeskill_challenge.py</span>
                   </div>
                   <span className="rounded bg-brand-500/20 px-2 py-0.5 text-[10px] font-mono text-brand-300 border border-brand-500/30">
                     PYTHON 3.12
@@ -170,7 +170,7 @@ export const HomePage: React.FC<HomePageProps> = ({
             <div>
               <h2 className="text-xl font-bold text-navy-900">Platform Overview</h2>
               <p className="text-xs text-slate-500 mt-0.5">
-                Calculated directly from CodeQuest's active quiz database
+                Calculated directly from CodeSkill's active quiz database
               </p>
             </div>
             <span className="self-start rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700 border border-emerald-200">
@@ -326,7 +326,7 @@ export const HomePage: React.FC<HomePageProps> = ({
               Simple 3-Step Methodology
             </span>
             <h2 className="text-2xl font-bold text-navy-900 sm:text-3xl mt-1">
-              How CodeQuest Works
+              How CodeSkill Works
             </h2>
             <p className="text-sm text-slate-600 mt-2">
               Designed to help developers test their intuition, isolate knowledge gaps, and remember programming rules effectively.
@@ -376,17 +376,17 @@ export const HomePage: React.FC<HomePageProps> = ({
         </div>
       </section>
 
-      {/* E. Why CodeQuest? */}
+      {/* E. Why CodeSkill? */}
       <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-2xl mx-auto mb-12">
           <span className="text-xs font-semibold text-brand-600 uppercase tracking-wider">
             Engineered For Growth
           </span>
           <h2 className="text-2xl font-bold text-navy-900 sm:text-3xl mt-1">
-            Why Practice on CodeQuest?
+            Why Practice on CodeSkill?
           </h2>
           <p className="text-sm text-slate-600 mt-2">
-            Most developers spend more time reading other people's code than writing new code. CodeQuest builds that exact superpower.
+            Most developers spend more time reading other people's code than writing new code. CodeSkill builds that exact superpower.
           </p>
         </div>
 

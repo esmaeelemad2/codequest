@@ -1,20 +1,28 @@
 <?php
 /**
- * CodeQuest AI Tutor - Configuration File
+ * CodeSkill AI Tutor - Configuration File
  *
  * This file is intentionally stored outside of the public document root
  * (/home/codeskill/api-config.php) so that API keys and secrets can NEVER
  * be downloaded or exposed via the web server.
  *
- * Supported providers: OpenAI, OpenRouter, Azure OpenAI, Groq, Mistral, Ollama,
- * or any OpenAI-compatible /chat/completions endpoint.
+ * File permissions should be restrictive: chmod 640 /home/codeskill/api-config.php
+ *
+ * Supported providers:
+ * - 'gemini': Google Gemini API (recommended: 'gemini-3.5-flash')
+ * - 'openai': OpenAI or any OpenAI-compatible /chat/completions endpoint
  */
 
-// Your private AI API key (e.g. 'sk-...' or your provider key)
+// AI provider: 'gemini' or 'openai'
+$AI_PROVIDER = 'gemini';
+
+// Your private AI API key
 $AI_API_KEY = '';
 
-// The base URL for the OpenAI-compatible endpoint (without trailing slash)
-$AI_API_BASE_URL = 'https://api.openai.com/v1';
+// The model identifier to use
+// For Gemini: 'gemini-3.5-flash'
+// For OpenAI: 'gpt-4o-mini', 'gpt-4o', etc.
+$AI_MODEL = 'gemini-3.5-flash';
 
-// The model identifier to use (e.g. 'gpt-4o-mini', 'gpt-4o', etc.)
-$AI_MODEL = 'gpt-4o-mini';
+// (Optional) OpenAI-compatible base URL if $AI_PROVIDER = 'openai'
+$AI_API_BASE_URL = 'https://api.openai.com/v1';
