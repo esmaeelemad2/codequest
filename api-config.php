@@ -1,28 +1,27 @@
 <?php
 /**
- * CodeSkill AI Tutor - Configuration File
+ * CodeSkill AI Tutor - Configuration File Template
  *
- * This file is intentionally stored outside of the public document root
- * (/home/codeskill/api-config.php) so that API keys and secrets can NEVER
- * be downloaded or exposed via the web server.
+ * This file is stored outside the public document root (/home/codeskill/api-config.php).
+ * File permissions: chmod 640 /home/codeskill/api-config.php
  *
- * File permissions should be restrictive: chmod 640 /home/codeskill/api-config.php
- *
- * Supported providers:
- * - 'gemini': Google Gemini API (recommended: 'gemini-3.5-flash')
- * - 'openai': OpenAI or any OpenAI-compatible /chat/completions endpoint
+ * Primary Provider: Groq API (ultra-fast LPU inference)
+ * Fallback Provider 1: OpenRouter (openrouter/free)
+ * Fallback Provider 2: Google Gemini (gemini-3.5-flash)
  */
 
-// AI provider: 'gemini' or 'openai'
-$AI_PROVIDER = 'gemini';
+// Primary Provider: Groq
+$AI_PROVIDER = 'groq';
+$AI_API_BASE_URL = 'https://api.groq.com/openai/v1';
+$AI_API_KEY = ''; // Primary Groq API key: gsk_...
+$AI_MODEL = 'openai/gpt-oss-20b';
 
-// Your private AI API key
-$AI_API_KEY = '';
+// Fallback Provider: OpenRouter
+$AI_FALLBACK_PROVIDER = 'openrouter';
+$AI_FALLBACK_API_BASE_URL = 'https://openrouter.ai/api/v1';
+$AI_FALLBACK_API_KEY = ''; // Optional OpenRouter API key
+$AI_FALLBACK_MODEL = 'openrouter/free';
 
-// The model identifier to use
-// For Gemini: 'gemini-3.5-flash'
-// For OpenAI: 'gpt-4o-mini', 'gpt-4o', etc.
-$AI_MODEL = 'gemini-3.5-flash';
-
-// (Optional) OpenAI-compatible base URL if $AI_PROVIDER = 'openai'
-$AI_API_BASE_URL = 'https://api.openai.com/v1';
+// Secondary Fallback: Google Gemini
+$AI_GEMINI_API_KEY = ''; // Google Gemini API key
+$AI_GEMINI_MODEL = 'gemini-3.5-flash';

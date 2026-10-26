@@ -69,7 +69,7 @@ export const Navbar: React.FC<NavbarProps> = ({
         </div>
 
         {/* Desktop Navigation Links */}
-        <nav className="hidden md:flex items-center gap-1">
+        <nav className="hidden md:flex items-center gap-0.5 lg:gap-1">
           {navItems.map((item) => {
             const Icon = item.icon;
             const isActive = currentTab === item.id;
@@ -78,7 +78,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 key={item.id}
                 type="button"
                 onClick={() => handleNavClick(item.id)}
-                className={`flex items-center gap-2 rounded-xl px-3.5 py-2 text-sm font-medium transition-all ${
+                className={`flex items-center gap-1.5 lg:gap-2 rounded-xl px-2.5 py-1.5 lg:px-3.5 lg:py-2 text-xs lg:text-sm font-medium transition-all ${
                   isActive
                     ? 'bg-brand-50 text-brand-700 font-semibold shadow-xs'
                     : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'

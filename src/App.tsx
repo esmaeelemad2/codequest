@@ -163,7 +163,6 @@ export const App: React.FC = () => {
 
         {currentTab === 'ai-tutor' && (
           <AiTutorPage
-            key={aiTutorInitialMessage}
             initialMessage={aiTutorInitialMessage}
             onNavigate={handleNavigate}
           />

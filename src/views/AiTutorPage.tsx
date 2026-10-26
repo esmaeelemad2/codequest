@@ -12,7 +12,7 @@ import {
   TrendingUp,
   BookOpen,
 } from 'lucide-react';
-import { ChatMessage, sendMessageToAI } from '../services/aiTutor';
+import { ChatMessage, streamMessageFromAI } from '../services/aiTutor';
 import { CodeBlock } from '../components/CodeBlock';
 import { ConfirmModal } from '../components/ConfirmModal';
 import { getAttempts, calculateStats } from '../services/storage';
@@ -90,6 +90,7 @@ export const AiTutorPage: React.FC<AiTutorPageProps> = ({ initialMessage, onNavi
   const [inputValue, setInputValue] = useState('');
   const [selectedLanguage, setSelectedLanguage] = useState('general');
   const [isLoading, setIsLoading] = useState(false);
+  const [streamingText, setStreamingText] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [setupRequired, setSetupRequired] = useState(false);
   const [setupMessage, setSetupMessage] = useState('');
@@ -101,10 +102,10 @@ export const AiTutorPage: React.FC<AiTutorPageProps> = ({ initialMessage, onNavi
   const attempts = getAttempts();
   const stats = attempts.length > 0 ? calculateStats() : null;
 
-  // Auto-scroll to bottom
+  // Auto-scroll to bottom as messages or streaming chunks update
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages, isLoading]);
+  }, [messages, isLoading, streamingText]);
 
   // Handle initialMessage prop (from "Ask AI" in quiz results)
   useEffect(() => {
@@ -124,27 +125,41 @@ export const AiTutorPage: React.FC<AiTutorPageProps> = ({ initialMessage, onNavi
     setMessages(updatedMessages);
     setInputValue('');
     setIsLoading(true);
+    setStreamingText('');
     setError(null);
     setLastUserMessage(text);
 
-    const response = await sendMessageToAI(updatedMessages, selectedLanguage);
+    try {
+      const response = await streamMessageFromAI(
+        updatedMessages,
+        selectedLanguage,
+        (_delta, accumulated) => {
+          setStreamingText(accumulated);
+        }
+      );
 
-    setIsLoading(false);
+      setIsLoading(false);
+      setStreamingText('');
 
-    if (response.setup_required) {
-      setSetupRequired(true);
-      setSetupMessage(response.message || 'AI Tutor is not configured.');
-      return;
-    }
+      if (response.setup_required) {
+        setSetupRequired(true);
+        setSetupMessage(response.message || 'AI Tutor is not configured.');
+        return;
+      }
 
-    if (response.error) {
-      setError(response.error);
-      return;
-    }
+      if (response.error) {
+        setError(response.error);
+        return;
+      }
 
-    if (response.content) {
-      const aiMsg: ChatMessage = { role: 'assistant', content: response.content };
-      setMessages(prev => [...prev, aiMsg]);
+      if (response.content) {
+        const aiMsg: ChatMessage = { role: 'assistant', content: response.content };
+        setMessages(prev => [...prev, aiMsg]);
+      }
+    } catch {
+      setIsLoading(false);
+      setStreamingText('');
+      setError('The AI tutor is temporarily busy. Your message is preserved; please click Retry to try again.');
     }
   }, [inputValue, isLoading, messages, selectedLanguage]);
 
@@ -173,6 +188,7 @@ export const AiTutorPage: React.FC<AiTutorPageProps> = ({ initialMessage, onNavi
 
   const handleClearChat = () => {
     setMessages([]);
+    setStreamingText('');
     setError(null);
     setSetupRequired(false);
     setLastUserMessage(null);
@@ -198,7 +214,7 @@ export const AiTutorPage: React.FC<AiTutorPageProps> = ({ initialMessage, onNavi
       <div className="space-y-2">
         <div className="inline-flex items-center gap-2 rounded-full border border-brand-200 bg-brand-50 px-3.5 py-1 text-xs font-semibold text-brand-700">
           <BrainCircuit className="h-3.5 w-3.5 text-brand-600" />
-          <span>AI-Powered Learning</span>
+          <span>AI-Powered Learning • High-Speed Inference</span>
         </div>
         <h1 className="text-3xl font-extrabold tracking-tight text-navy-900 sm:text-4xl">
           Your Personal AI Programming Tutor
@@ -219,10 +235,10 @@ export const AiTutorPage: React.FC<AiTutorPageProps> = ({ initialMessage, onNavi
             <p className="text-sm text-amber-800 leading-relaxed">{setupMessage}</p>
             <div className="mt-3 rounded-xl border border-amber-200 bg-white p-4 text-xs font-mono text-slate-700 space-y-1">
               <p className="font-sans font-semibold text-slate-900 mb-2">Administrator Setup Instructions:</p>
-              <p>1. SSH into the server</p>
-              <p>2. Edit: <span className="text-brand-600">/home/codeskill/api-config.php</span></p>
-              <p>3. Set <span className="text-brand-600">$AI_API_KEY</span> to your OpenAI API key</p>
-              <p>4. Optionally set <span className="text-brand-600">$AI_MODEL</span> (default: gpt-4o-mini)</p>
+              <p>1. SSH into the server: <span className="text-brand-600">/home/codeskill/api-config.php</span></p>
+              <p>2. Set <span className="text-brand-600">$AI_API_KEY</span> to your Groq API key (gsk_...)</p>
+              <p>3. Set <span className="text-brand-600">$AI_MODEL</span> (default: openai/gpt-oss-20b)</p>
+              <p>4. Optionally set <span className="text-brand-600">$AI_FALLBACK_API_KEY</span> for OpenRouter (sk-or-...)</p>
               <p>5. Save the file — no server restart needed</p>
             </div>
           </div>
@@ -234,12 +250,12 @@ export const AiTutorPage: React.FC<AiTutorPageProps> = ({ initialMessage, onNavi
         {/* Chat Toolbar */}
         <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 bg-slate-50/70 px-4 py-3">
           <div className="flex items-center gap-3">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-600 text-white">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-600 text-white shadow-xs">
               <BrainCircuit className="h-4 w-4" />
             </div>
             <span className="text-sm font-semibold text-slate-900">CodeSkill AI Tutor</span>
-            <span className="hidden sm:inline rounded-full bg-emerald-100 px-2 py-0.5 text-[10px] font-bold text-emerald-700">
-              ONLINE
+            <span className="hidden sm:inline rounded-full bg-emerald-100 px-2.5 py-0.5 text-[10px] font-bold text-emerald-700 border border-emerald-200">
+              FAST STREAMING READY
             </span>
           </div>
 
@@ -249,7 +265,7 @@ export const AiTutorPage: React.FC<AiTutorPageProps> = ({ initialMessage, onNavi
               <select
                 value={selectedLanguage}
                 onChange={e => setSelectedLanguage(e.target.value)}
-                className="appearance-none rounded-xl border border-slate-200 bg-white py-1.5 pl-3 pr-8 text-xs font-semibold text-slate-700 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
+                className="appearance-none rounded-xl border border-slate-200 bg-white py-1.5 pl-3 pr-8 text-xs font-semibold text-slate-700 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20 shadow-2xs"
               >
                 {SUPPORTED_LANGUAGES.map(lang => (
                   <option key={lang.value} value={lang.value}>{lang.label}</option>
@@ -262,7 +278,7 @@ export const AiTutorPage: React.FC<AiTutorPageProps> = ({ initialMessage, onNavi
               <button
                 type="button"
                 onClick={() => setShowClearConfirm(true)}
-                className="flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-600 hover:bg-slate-50 hover:text-rose-600 transition-colors"
+                className="flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-600 hover:bg-slate-50 hover:text-rose-600 transition-colors shadow-2xs"
                 title="Clear conversation"
               >
                 <Trash2 className="h-3.5 w-3.5" />
@@ -273,15 +289,15 @@ export const AiTutorPage: React.FC<AiTutorPageProps> = ({ initialMessage, onNavi
         </div>
 
         {/* Messages Area */}
-        <div className="h-[420px] overflow-y-auto p-4 space-y-4 scroll-smooth" role="log" aria-live="polite" aria-label="Chat messages">
+        <div className="h-[440px] overflow-y-auto p-4 space-y-4 scroll-smooth" role="log" aria-live="polite" aria-label="Chat messages">
           {messages.length === 0 && !setupRequired && (
             <div className="flex flex-col items-center justify-center h-full text-center space-y-6 py-8">
-              <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-brand-50 text-brand-600">
+              <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-brand-50 text-brand-600 shadow-xs border border-brand-100">
                 <BrainCircuit className="h-8 w-8" />
               </div>
               <div>
                 <h3 className="text-base font-bold text-navy-900">Start a Conversation</h3>
-                <p className="mt-1 text-sm text-slate-500">Ask anything about programming, or try one of these:</p>
+                <p className="mt-1 text-sm text-slate-500">Ask anything about programming, or try one of these suggestions:</p>
               </div>
               <div className="flex flex-wrap justify-center gap-2 max-w-xl">
                 {SUGGESTED_PROMPTS.map((prompt, i) => (
@@ -289,7 +305,7 @@ export const AiTutorPage: React.FC<AiTutorPageProps> = ({ initialMessage, onNavi
                     key={i}
                     type="button"
                     onClick={() => handleSuggestedPrompt(prompt)}
-                    className="rounded-xl border border-brand-200 bg-brand-50 px-3.5 py-2 text-xs font-medium text-brand-700 hover:bg-brand-100 hover:border-brand-300 transition-colors text-left"
+                    className="rounded-xl border border-brand-200 bg-brand-50/80 px-3.5 py-2 text-xs font-medium text-brand-700 hover:bg-brand-100 hover:border-brand-300 transition-all text-left shadow-2xs"
                   >
                     {prompt}
                   </button>
@@ -304,7 +320,7 @@ export const AiTutorPage: React.FC<AiTutorPageProps> = ({ initialMessage, onNavi
               className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'} animate-fade-in`}
             >
               {msg.role === 'assistant' && (
-                <div className="mr-2 mt-1 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-brand-600 text-white">
+                <div className="mr-2 mt-1 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-brand-600 text-white shadow-2xs">
                   <BrainCircuit className="h-3.5 w-3.5" />
                 </div>
               )}
@@ -324,37 +340,41 @@ export const AiTutorPage: React.FC<AiTutorPageProps> = ({ initialMessage, onNavi
             </div>
           ))}
 
-          {/* Loading indicator */}
+          {/* Progressive Streaming & Thinking Indicator */}
           {isLoading && (
             <div className="flex justify-start animate-fade-in">
-              <div className="mr-2 mt-1 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-brand-600 text-white">
+              <div className="mr-2 mt-1 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-brand-600 text-white shadow-2xs">
                 <BrainCircuit className="h-3.5 w-3.5" />
               </div>
-              <div className="max-w-[85%] rounded-2xl rounded-tl-sm bg-white border border-slate-200 px-4 py-3">
-                <div className="flex items-center gap-1.5">
-                  <span className="h-2 w-2 rounded-full bg-brand-400 animate-bounce" style={{ animationDelay: '0ms' }} />
-                  <span className="h-2 w-2 rounded-full bg-brand-400 animate-bounce" style={{ animationDelay: '150ms' }} />
-                  <span className="h-2 w-2 rounded-full bg-brand-400 animate-bounce" style={{ animationDelay: '300ms' }} />
-                  <span className="ml-2 text-xs text-slate-500">Thinking...</span>
-                </div>
+              <div className="max-w-[85%] rounded-2xl rounded-tl-sm bg-white border border-slate-200 px-4 py-3 text-sm shadow-xs">
+                {streamingText ? (
+                  <MessageContent text={streamingText} />
+                ) : (
+                  <div className="flex items-center gap-1.5 py-1">
+                    <span className="h-2 w-2 rounded-full bg-brand-500 animate-bounce" style={{ animationDelay: '0ms' }} />
+                    <span className="h-2 w-2 rounded-full bg-brand-500 animate-bounce" style={{ animationDelay: '150ms' }} />
+                    <span className="h-2 w-2 rounded-full bg-brand-500 animate-bounce" style={{ animationDelay: '300ms' }} />
+                    <span className="ml-2 text-xs text-slate-500 font-medium">Thinking...</span>
+                  </div>
+                )}
               </div>
             </div>
           )}
 
-          {/* Error display */}
+          {/* Error display with Retry */}
           {error && (
             <div className="flex justify-start animate-fade-in">
-              <div className="flex items-start gap-3 max-w-[85%] rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3">
+              <div className="flex items-start gap-3 max-w-[85%] rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 shadow-2xs">
                 <AlertCircle className="h-4 w-4 text-rose-600 shrink-0 mt-0.5" />
                 <div className="space-y-2">
-                  <p className="text-xs text-rose-800">{error}</p>
+                  <p className="text-xs text-rose-800 font-medium">{error}</p>
                   <button
                     type="button"
                     onClick={handleRetry}
-                    className="flex items-center gap-1.5 rounded-lg bg-rose-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-rose-700 transition-colors"
+                    className="flex items-center gap-1.5 rounded-lg bg-rose-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-rose-700 transition-colors shadow-2xs active:scale-95"
                   >
                     <RotateCcw className="h-3 w-3" />
-                    <span>Retry</span>
+                    <span>Retry Question</span>
                   </button>
                 </div>
               </div>
@@ -374,9 +394,9 @@ export const AiTutorPage: React.FC<AiTutorPageProps> = ({ initialMessage, onNavi
                 onChange={e => setInputValue(e.target.value.slice(0, charLimit))}
                 onKeyDown={handleKeyDown}
                 disabled={isLoading}
-                placeholder="Ask a programming question... (Ctrl+Enter to send)"
+                placeholder={isLoading ? "AI is generating a response..." : "Ask a programming question... (Ctrl+Enter to send)"}
                 rows={3}
-                className="w-full resize-none rounded-xl border border-slate-200 bg-white px-4 py-3 pr-16 text-sm text-slate-900 placeholder:text-slate-400 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20 disabled:opacity-60 disabled:cursor-not-allowed"
+                className="w-full resize-none rounded-xl border border-slate-200 bg-white px-4 py-3 pr-16 text-sm text-slate-900 placeholder:text-slate-400 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20 disabled:opacity-60 disabled:bg-slate-50 disabled:cursor-not-allowed shadow-2xs"
                 aria-label="Message to AI Tutor"
               />
               <button
@@ -390,7 +410,7 @@ export const AiTutorPage: React.FC<AiTutorPageProps> = ({ initialMessage, onNavi
               </button>
             </div>
             <div className="flex items-center justify-between text-xs text-slate-400">
-              <span>Ctrl+Enter to send</span>
+              <span>Press <kbd className="px-1.5 py-0.5 rounded border border-slate-200 bg-white font-mono text-[10px]">Ctrl+Enter</kbd> to send</span>
               {isNearLimit && (
                 <span className={charCount >= charLimit ? 'text-rose-600 font-semibold' : 'text-amber-600'}>
                   {charCount}/{charLimit}
@@ -421,7 +441,7 @@ export const AiTutorPage: React.FC<AiTutorPageProps> = ({ initialMessage, onNavi
                       key={topic}
                       type="button"
                       onClick={() => handleSuggestedPrompt(`Explain ${topic} with a clear example in ${selectedLanguage === 'general' ? 'Python' : selectedLanguage}.`)}
-                      className="group flex items-center gap-1.5 rounded-xl border border-amber-200 bg-amber-50 px-3 py-1.5 text-xs font-medium text-amber-800 hover:bg-amber-100 transition-colors"
+                      className="group flex items-center gap-1.5 rounded-xl border border-amber-200 bg-amber-50 px-3 py-1.5 text-xs font-medium text-amber-800 hover:bg-amber-100 transition-colors shadow-2xs"
                     >
                       <Lightbulb className="h-3 w-3 text-amber-600" />
                       <span>{topic}</span>
@@ -446,7 +466,7 @@ export const AiTutorPage: React.FC<AiTutorPageProps> = ({ initialMessage, onNavi
                         setSelectedLanguage(lang);
                         handleSuggestedPrompt(`Give me a beginner exercise to practice ${lang} fundamentals.`);
                       }}
-                      className="flex items-center gap-1.5 rounded-xl border border-brand-200 bg-brand-50 px-3 py-1.5 text-xs font-medium text-brand-700 hover:bg-brand-100 transition-colors"
+                      className="flex items-center gap-1.5 rounded-xl border border-brand-200 bg-brand-50 px-3 py-1.5 text-xs font-medium text-brand-700 hover:bg-brand-100 transition-colors shadow-2xs"
                     >
                       <BookOpen className="h-3 w-3 text-brand-600" />
                       <span className="capitalize">{lang}</span>
@@ -483,12 +503,14 @@ export const AiTutorPage: React.FC<AiTutorPageProps> = ({ initialMessage, onNavi
                   type="button"
                   onClick={() => {
                     setSelectedLanguage(lang);
-                    handleSuggestedPrompt(`Explain ${topic} with a practical example.`);
+                    handleSuggestedPrompt(`Explain ${topic} with a simple code snippet.`);
                   }}
-                  className="flex items-start gap-2 rounded-xl border border-slate-200 bg-slate-50 p-3 text-left text-xs text-slate-700 hover:bg-slate-100 hover:border-slate-300 transition-colors"
+                  className="flex items-center justify-between rounded-xl border border-slate-200 bg-slate-50/50 p-3 text-left text-xs text-slate-700 hover:bg-brand-50 hover:border-brand-200 hover:text-brand-700 transition-colors shadow-2xs"
                 >
-                  <Sparkles className="h-3.5 w-3.5 text-brand-500 shrink-0 mt-0.5" />
-                  <span>{topic}</span>
+                  <span className="font-medium">{topic}</span>
+                  <span className="rounded bg-slate-200/60 px-1.5 py-0.5 text-[10px] font-mono uppercase text-slate-600">
+                    {lang}
+                  </span>
                 </button>
               ))}
             </div>
@@ -496,13 +518,13 @@ export const AiTutorPage: React.FC<AiTutorPageProps> = ({ initialMessage, onNavi
         )}
       </div>
 
-      {/* Clear Chat Confirmation Modal */}
+      {/* Clear Confirmation Modal */}
       <ConfirmModal
         isOpen={showClearConfirm}
         title="Clear Conversation?"
-        message="This will remove all messages in the current chat. Your quiz progress and bookmarks are not affected."
+        message="Are you sure you want to clear the entire chat history? This action cannot be undone."
         confirmLabel="Clear Chat"
-        cancelLabel="Keep Conversation"
+        cancelLabel="Cancel"
         isDestructive={true}
         onConfirm={handleClearChat}
         onCancel={() => setShowClearConfirm(false)}
